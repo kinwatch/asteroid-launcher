@@ -143,14 +143,8 @@ Item {
     }
     DisplaySettings { id: displaySettings }
 
-    // Play the un-mute confirmation through ngf rather than a QtMultimedia
-    // SoundEffect: on Qt6 a SoundEffect plays chopped and holds a PulseAudio
-    // stream open for its whole lifetime, preventing the audio sink from
-    // suspending (constant battery drain). ngfd plays gaplessly via a
-    // short-lived GStreamer pipeline so the sink can suspend again at idle.
-    // Reuses the "notification" ngf event.
     NonGraphicalFeedback {
-        id: unmuteFeedback
+        id: unmuteSound
         event: "notification"
     }
 
@@ -708,7 +702,7 @@ Item {
                 id: soundDelayTimer
                 interval: 150
                 repeat: false
-                onTriggered: unmuteFeedback.play()
+                onTriggered: unmuteSound.play()
             }
 
             Connections {

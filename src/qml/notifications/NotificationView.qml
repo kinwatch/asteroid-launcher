@@ -39,17 +39,8 @@ MouseArea {
     property bool forbidTop: column.y < 0
     property real prevY: 0
 
-    // Play the notification sound through ngf instead of a QtMultimedia
-    // SoundEffect, which misbehaves twice on Qt6: its playback chops the
-    // sample into fragments with audible gaps, and it opens a PulseAudio
-    // stream on construction that it holds for the object's whole lifetime,
-    // keeping the audio sink (and its power rail) from ever suspending -- a
-    // constant standby battery drain. ngfd plays the sound gaplessly through a
-    // short-lived GStreamer pipeline that tears down when playback ends, so
-    // the sink suspends again at idle. It also routes through the profile
-    // plugin, so the sound now honours silent mode.
     NonGraphicalFeedback {
-        id: notifFeedback
+        id: notifSound
         event: "notification"
     }
 
@@ -58,7 +49,7 @@ MouseArea {
             appName.text = notification.appName
             summary.text = notification.summary
             body.text = notification.body
-            notifFeedback.play()
+            notifSound.play()
             updateTimestamp()
         }
     }
